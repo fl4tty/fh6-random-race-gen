@@ -1,0 +1,19 @@
+name: FTP Debug (list directories)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List FTP login root
+        run: |
+          echo "--- root ---"
+          curl --ftp-ssl -s -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/" --list-only
+          echo "--- public_html (if it exists at root) ---"
+          curl --ftp-ssl -s -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/public_html/" --list-only || true
+          echo "--- public_html/fh6 (if it exists) ---"
+          curl --ftp-ssl -s -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/public_html/fh6/" --list-only || true
+          echo "--- fh6 (if it exists at root) ---"
+          curl --ftp-ssl -s -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/fh6/" --list-only || true
