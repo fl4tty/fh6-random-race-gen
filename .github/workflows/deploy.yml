@@ -1,0 +1,35 @@
+name: Deploy to Turbify (FTP)
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "index.html"
+      - "fh6-random-race-gen.html"
+      - "fh6-map.jpg"
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Stage only the files the live site needs
+        run: |
+          mkdir deploy
+          cp index.html fh6-random-race-gen.html fh6-map.jpg deploy/
+
+      - name: FTP deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Edit this to the actual folder cPanel's File Manager opens into
+          # for this site (e.g. /public_html/ for the primary domain, or
+          # /public_html/fh6/ for a subdomain/addon domain).
+          server-dir: /public_html/
+          local-dir: ./deploy/
+          dangerous-clean-slate: false
