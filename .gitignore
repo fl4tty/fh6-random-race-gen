@@ -1,0 +1,13 @@
+# Claude's local settings and old output copies
+.claude/
+Claude outputs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secrets (API keys for the tune finder)
+.env
+
+# Map pin backups exported from the race generator
+fh6-*race-gen-pins*.json

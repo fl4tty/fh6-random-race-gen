@@ -1,0 +1,651 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tune Code Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#eef0f2;
+    --surface:#ffffff;
+    --surface-2:#f7f8f9;
+    --text:#171a1f;
+    --text-dim:#565f6b;
+    --border:#d7dbe0;
+    --accent:#e8590c;
+    --accent-ink:#ffffff;
+    --accent-soft:#fdece1;
+    --data:#0f7b6c;
+    --data-soft:#e5f4f1;
+    --shadow: 0 1px 2px rgba(20,20,25,.04), 0 8px 24px -12px rgba(20,20,25,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f1216;
+      --surface:#171b21;
+      --surface-2:#1d222a;
+      --text:#eef1f5;
+      --text-dim:#98a2b0;
+      --border:#2a3039;
+      --accent:#ff7a33;
+      --accent-ink:#1a0d00;
+      --accent-soft:#2c1809;
+      --data:#4bdcc2;
+      --data-soft:#102723;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1216;
+    --surface:#171b21;
+    --surface-2:#1d222a;
+    --text:#eef1f5;
+    --text-dim:#98a2b0;
+    --border:#2a3039;
+    --accent:#ff7a33;
+    --accent-ink:#1a0d00;
+    --accent-soft:#2c1809;
+    --data:#4bdcc2;
+    --data-soft:#102723;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+    padding-inline:16px;
+    padding-block:32px 56px;
+    display:flex;
+    justify-content:center;
+  }
+  .page{width:100%;max-width:720px;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+    font-size:11.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+
+  header.dash{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px 24px;
+    margin-bottom:28px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--border);
+  }
+  h1{
+    font-family:"Rajdhani",system-ui,sans-serif;
+    font-weight:700;
+    font-size:clamp(28px,6vw,38px);
+    line-height:1.05;
+    letter-spacing:.01em;
+    margin:6px 0 4px;
+  }
+  .sub{color:var(--text-dim);font-size:14.5px;max-width:46ch;}
+
+  .gauges{display:flex;gap:10px;flex-wrap:wrap;}
+  .gauge{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:8px 14px;
+    min-width:86px;
+    box-shadow:var(--shadow);
+  }
+  .gauge b{
+    display:block;
+    font-family:"IBM Plex Mono",monospace;
+    font-variant-numeric:tabular-nums;
+    font-size:20px;
+    font-weight:600;
+    color:var(--data);
+  }
+  .gauge span{
+    font-size:10.5px;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+
+  .field{margin-bottom:16px;}
+  .field:last-of-type{margin-bottom:0;}
+  label.f-label{
+    display:block;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:6px;
+  }
+  select, input[type="text"]{
+    width:100%;
+    appearance:none;
+    -webkit-appearance:none;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:9px;
+    padding:12px 14px;
+    font-size:15.5px;
+    font-family:"IBM Plex Sans",sans-serif;
+  }
+  select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23565f6b' stroke-width='1.8'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    background-size:16px;
+    padding-right:36px;
+  }
+  select:focus-visible, input:focus-visible, button:focus-visible, a.linkchip:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:520px){.row2{grid-template-columns:1fr;}}
+
+  .go{
+    width:100%;
+    margin-top:20px;
+    background:var(--accent);
+    color:var(--accent-ink);
+    border:none;
+    border-radius:10px;
+    padding:14px 18px;
+    font-family:"Rajdhani",sans-serif;
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .go:disabled{opacity:.5;cursor:not-allowed;}
+  .go:not(:disabled):hover{filter:brightness(1.05);}
+
+  .hint{
+    margin-top:10px;
+    font-size:12.5px;
+    color:var(--text-dim);
+  }
+
+  section.results{margin-top:26px;}
+  section.results[hidden]{display:none;}
+
+  .query-echo{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:13.5px;
+    background:var(--data-soft);
+    color:var(--data);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:18px;
+    word-break:break-word;
+  }
+
+  a.gai-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    border:1px solid var(--accent);
+    border-radius:10px;
+    padding:12px 16px;
+    text-decoration:none;
+    font-family:"Rajdhani",sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  a.gai-btn:hover{filter:brightness(1.05);}
+
+  .group-label{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin:0 0 10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .group-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--border);
+  }
+  .linkgrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  @media (max-width:480px){.linkgrid{grid-template-columns:1fr;}}
+
+  a.linkchip{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    text-decoration:none;
+    color:var(--text);
+  }
+  a.linkchip:hover{border-color:var(--accent);}
+  a.linkchip .name{font-size:14.5px;font-weight:500;}
+  a.linkchip .desc{display:block;font-size:11.5px;color:var(--text-dim);font-weight:400;margin-top:1px;}
+  a.linkchip svg{flex:none;color:var(--text-dim);}
+
+  .livewrap{margin-bottom:26px;}
+  .live-status{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:var(--text-dim);
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  .spinner{
+    width:14px;height:14px;flex:none;
+    border-radius:50%;
+    border:2px solid var(--border);
+    border-top-color:var(--accent);
+    animation:spin .7s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .live-status.err{color:var(--text);border-color:var(--accent);}
+  .retry{
+    margin-left:auto;
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:7px;
+    padding:6px 10px;
+    font-size:12px;
+    font-family:"IBM Plex Sans",sans-serif;
+    cursor:pointer;
+  }
+  .retry:hover{border-color:var(--accent);}
+
+  a.live-card{
+    display:block;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    text-decoration:none;
+    color:var(--text);
+    margin-bottom:10px;
+  }
+  a.live-card:last-child{margin-bottom:0;}
+  a.live-card:hover{border-color:var(--accent);}
+  .live-card .lc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
+  .live-card .lc-title{font-size:14px;font-weight:500;}
+  .live-card .lc-domain{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;color:var(--text-dim);flex:none;}
+  .live-card .lc-excerpt{font-size:12.5px;color:var(--text-dim);line-height:1.5;}
+  .code-badge{
+    display:inline-block;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.03em;
+    color:var(--data);
+    background:var(--data-soft);
+    border-radius:6px;
+    padding:2px 8px;
+    margin-top:6px;
+  }
+  #liveResults{display:flex;flex-wrap:wrap;gap:10px;}
+  a.code-chip{
+    display:inline-block;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:16px;
+    font-weight:600;
+    letter-spacing:.04em;
+    color:var(--data);
+    background:var(--data-soft);
+    border:1px solid var(--data);
+    border-radius:9px;
+    padding:10px 16px;
+    text-decoration:none;
+  }
+  a.code-chip:hover{filter:brightness(1.08);}
+
+  .ai-overview{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:14px;
+  }
+  .ai-overview-label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .ai-overview p{margin:0;font-size:13.5px;line-height:1.55;color:var(--text);}
+
+  footer{
+    margin-top:30px;
+    font-size:12px;
+    line-height:1.6;
+    color:var(--text-dim);
+  }
+  footer p{margin:0 0 8px;}
+</style>
+
+<div class="page">
+
+  <header class="dash">
+    <div>
+      <div class="eyebrow">Forza Horizon 6 · Community Tuning</div>
+      <h1>Tune Code Finder</h1>
+      <p class="sub">Pick your car and press the button — it opens Google AI Mode with your search ready to go, plus a full list of community tune databases and search engines.</p>
+    </div>
+    <div class="gauges">
+      <div class="gauge"><b id="mfrCount">–</b><span>Makes</span></div>
+      <div class="gauge"><b id="modelCount">–</b><span>Models</span></div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="row2">
+      <div class="field">
+        <label class="f-label" for="make">Manufacturer</label>
+        <select id="make"></select>
+      </div>
+      <div class="field" id="makeOtherField" hidden>
+        <label class="f-label" for="makeOther">Manufacturer name</label>
+        <input type="text" id="makeOther" placeholder="e.g. Wuling">
+      </div>
+      <div class="field">
+        <label class="f-label" for="model">Model</label>
+        <select id="model"></select>
+      </div>
+      <div class="field" id="modelOtherField" hidden>
+        <label class="f-label" for="modelOther">Model name</label>
+        <input type="text" id="modelOther" placeholder="e.g. Hongguang Mini EV">
+      </div>
+    </div>
+
+    <button class="go" id="goBtn" type="button" disabled>Find tune codes</button>
+    <p class="hint">Don't see your car? Choose <strong>Other / not listed</strong> in either menu and type it in — FH6 keeps adding cars through Car Pass and seasonal updates.</p>
+  </div>
+
+  <section class="results" id="results" hidden>
+    <div class="query-echo" id="queryEcho"></div>
+
+    <a class="gai-btn" id="googleAiModeLink" href="#" target="_blank" rel="noopener noreferrer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.9 5.8L20 9.5l-6.1 1.7L12 17l-1.9-5.8L4 9.5l6.1-1.7z"/></svg>
+      Open in Google AI Mode
+    </a>
+
+    <p class="group-label">Community tune databases</p>
+    <div class="linkgrid" id="dbLinks"></div>
+
+    <p class="group-label">Search engines</p>
+    <div class="linkgrid" id="webLinks"></div>
+  </section>
+
+  <footer>
+    <p>Roster compiled from official and community FH6 car lists shortly after the game's May 2026 launch — around 90 manufacturers and 590+ models. New vehicles arrive regularly via Car Pass DLC and seasonal updates, so treat this as a strong starting point rather than the final word.</p>
+    <p>Tune codes are submitted by other players — read the notes/ratings on whatever site you land on before applying one, since results vary by drivetrain swaps, engine swaps, and PI class.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var CARS = {
+    "Abarth": ["595 esseesse (1968)", "Fiat 131 (1980)", "695 Biposto", "124 Spider"],
+    "Acura": ["Integra Type R (2001)", "RSX Type S", "NSX Type S", "Integra A-Spec"],
+    "Alfa Romeo": ["Giulia Sprint GTA Stradale", "Giulia TZ2", "33 Stradale", "Autodelta Tipo 33/2 Daytona", "SE 048SP", "155 Q4", "8C Competizione", "4C", "Giulia Quadrifoglio", "Giulia GTAm"],
+    "Alumicraft": ["Class 10 Race Car", "#122 Class 1 Buggy", "#6165 Trick Truck"],
+    "AMG Transport Dynamics": ["M12S Warthog CST"],
+    "Apollo": ["Intensa Emozione"],
+    "Ariel": ["Atom 500 V8", "Nomad"],
+    "Aston Martin": ["DB5", "DB7 GT", "Vulcan", "DB11", "Vulcan AMR Pro", "DBS Superleggera", "Valhalla Concept Car", "Vantage", "DBX", "Valkyrie AMR Pro", "Valkyrie"],
+    "Audi": ["Sport quattro (1984)", "#2 Sport quattro S1 (1986)", "RS 4 Avant (2001)", "RS 6 (2003)", "RS 4 (2006)", "R8 LMS", "RS 6 (2009)", "TT RS Coupé", "RS 3 Sportback", "RS 5 Coupé", "R8 Coupé V10 plus 5.2 FSI quattro", "RS 4 Avant (2013)", "RS 7 Sportback (2013)", "RS 6 Avant (2015)", "S1", "R8 V10 plus", "RS 4 Avant (2018)", "R8 V10 performance", "RS 3 Sedan", "RS 6 Avant (2021)", "RS 7 Sportback (2021)", "RS e-tron GT", "R8 Coupé V10 GT RWD"],
+    "Austin-Healey": ["3000 MkIII"],
+    "Autozam": ["AZ-1"],
+    "BAC": ["Mono"],
+    "Bentley": ["Bentayga", "Continental GT Convertible", "Continental GT Speed"],
+    "BMW": ["Isetta 300 Export", "2002 Turbo", "M1", "M3 (1988)", "M5 (1988)", "850CSi", "M5 (1995)", "M3 (1997)", "M5 (2003)", "M3 (2005)", "M3 (2008)", "Z4 M Coupé", "M5 (2009)", "M3 GTS", "X5 M", "M5 (2012)", "M4 Coupé", "i8", "M4 GTS", "Z4 Roadster", "M2 Competition Coupé", "M8 Competition Coupé", "M4 Competition Coupé", "M4 Competition Coupé Welcome Pack", "iX xDrive50", "M5 CS", "M2 (2023)", "M2 Forza Edition", "X6 M Competition"],
+    "Buick": ["Regal GNX"],
+    "Cadillac": ["XTS Limousine", "ATS-V", "CTS-V Sedan", "CT4-V Blackwing", "CT5-V Blackwing"],
+    "Can-Am": ["Maverick X RS Turbo R"],
+    "Casey Currie Motorsports": ["#4402 Ultra 4 'Trophy Jeep'"],
+    "Chevrolet": ["Corvette (1953)", "150 Utility Sedan", "Bel Air", "Corvette (1960)", "Impala Super Sport 409", "Corvette Stingray 427", "Camaro Super Sport Coupe", "Nova Super Sport 396", "Camaro Z28 (1970)", "Chevelle Super Sport 454", "Corvette ZR-1 (1970)", "El Camino Super Sport 454", "K-10 Custom", "Camaro Z28 (1979)", "Monte Carlo Super Sport", "Corvette ZR-1 (1995)", "Impala Super Sport (1996)", "Corvette Z06 (2002)", "Corvette ZR1 (2009)", "Camaro Z/28", "Corvette Z06 (2015)", "Camaro ZL1 (2017)", "Camaro ZL1 1LE", "Corvette ZR1 (2019)", "Corvette Stingray Coupe", "Silverado LT Trail Boss", "Corvette Z06 (2023)", "Corvette E-Ray", "Camaro ZL1 (2024)"],
+    "Datsun": ["2000 Roadster", "510", "#269 Attacking the Clock Racing 240Z"],
+    "De Tomaso": ["Pantera GT5"],
+    "DeBerti": ["Jeep Wrangler Unlimited", "Chevrolet Silverado 1500 Drift Truck", "Ford Super Duty F-250 Lariat", "Toyota Tacoma TRD"],
+    "DeLorean": ["DMC-12"],
+    "Dodge": ["Dart HEMI Super Stock", "Charger Daytona HEMI", "Charger R/T", "Challenger R/T", "Coronet Super Bee", "Viper GTS ACR", "Viper GTS ACR Forza Edition", "Ram SRT-10", "Viper SRT-10 ACR", "Challenger SRT Hellcat", "Charger SRT Hellcat", "Viper ACR", "Challenger SRT Demon", "Durango SRT Hellcat", "Challenger SRT Super Stock", "Challenger SRT Demon 170"],
+    "Exomotive": ["Exocet Sport V8 XP-5"],
+    "Ferrari": ["250 GT Berlinetta Lusso", "250 GTO", "#24 330 P4", "275 GTB4 Spider", "Dino 246 GT", "512 S", "288 GTO", "F40", "F40 Competizione", "512 TR", "F355 Berlinetta", "F50", "F50 GT", "Enzo Ferrari", "FXX", "430 Scuderia", "458 Italia", "599XX", "599XX Evolution", "458 Speciale", "LaFerrari", "FXX K", "488 GTB", "F12tdf", "812 Superfast", "J50", "J50 Preorder Car", "FXX-K Evo", "FXX-K Evo Welcome Pack", "Portofino", "488 Pista", "F8 Tributo", "Monza SP2", "Roma", "SF90 Stradale", "296 GTB", "F80"],
+    "Ford": ["De Luxe Five-Window Coupe", "Thunderbird", "Mustang GT Coupe (1965)", "#2 GT40 Mk II", "Mustang GT 2+2 Fastback", "Mustang GT 2+2 Fastback Forza Edition", "Mustang Boss 302", "Capri RS3100", "XB Falcon GT", "#5 Escort RS1800 MkII", "RS200 Evolution", "F-150 XLT Lariat", "F-150 XLT Lariat Forza Edition", "Sierra Cosworth RS500", "Escort RS Cosworth", "Mustang SVT Cobra R (1993)", "Supervan 3", "Racing Puma", "Mustang SVT Cobra R (2000)", "#4 Focus RS (2001)", "F-150 SVT Lightning", "Focus RS (2003)", "GT (2005)", "Focus RS (2009)", "Crown Victoria Police Interceptor", "Transit SuperSportVan", "Mustang Shelby GT500 (2013)", "#11 Rockstar F-150 Trophy Truck", "FPV Limited Edition Pursuit Ute", "Ranger T6 Rally Raid", "Mustang Shelby GT350R", "#14 Rahal Letterman Lanigan Racing Fiesta", "#25 'Brocky' Ultra4 Bronco RTR", "Focus RS (2017)", "GT (2017)", "M-Sport Fiesta RS", "Mustang RTR Spec 5", "#2069 Ford Performance Bronco R", "Mustang Shelby GT500 (2020)", "Super Duty F-450 DRW Platinum", "Super Duty F-450 DRW Platinum Forza Edition", "Bronco Raptor", "F-150 Lightning", "Focus ST", "Supervan 4", "F-150 Raptor R", "F-150 Raptor R Welcome Pack", "Fiesta ST", "Mustang Dark Horse", "Mustang GT (2024)"],
+    "Formula Drift": ["#98 BMW 325i", "#34 Toyota Supra MkIV", "#777 Nissan 240SX", "#43 Dodge Viper SRT-10 ACR", "#117 599 GTB Fiorano", "#99 Mazda RX-8", "#777 Chevrolet Corvette", "#13 Ford Mustang", "#530 HSV Maloo GEN-F", "#411 Toyota Corolla Hatchback", "#151 Toyota GR Supra", "#91 BMW M2", "#64 Forsberg Racing Nissan Z"],
+    "Funco Motorsports": ["F9"],
+    "Ginetta": ["G40 Junior"],
+    "GMC": ["Jimmy", "Syclone", "Typhoon", "HUMMER EV Pickup"],
+    "Gordon Murray Automotive": ["T.50"],
+    "GR": ["GT Prototype"],
+    "Hennessey": ["Venom GT", "Ford F-150 VelociRaptor 6X6", "Venom F5"],
+    "Holden": ["Torana A9X"],
+    "Honda": ["S800", "Z GT", "N600", "Civic RS", "City E II", "Civic CRX Mugen", "Civic Si", "#19 101 Motorsport CRX WTAC", "Beat", "CR-X SiR", "#21 Hardrace/JDMYard Civic WTAC", "NSX-R (1992)", "Acty", "Prelude Si", "Civic Type R (1997)", "#33 Integra WTAC", "S2000", "#52 Evasive Motorsports S2000 WTAC", "Civic Type R (2004)", "NSX-R (2005)", "NSX-R GT", "Civic Type R (2007)", "Civic Type R (FD2)", "Civic Type R (2015)", "Ridgeline Baja Trophy Truck", "Civic Type R (2018)", "e", "Civic Type R (2023)"],
+    "HSV": ["GEN-F GTS", "Limited Edition GEN-F GTS Maloo"],
+    "Hyundai": ["Veloster N", "i30 N", "i20 N", "N Vision 74", "IONIQ 5 N"],
+    "Jaguar": ["D-Type", "E-type", "Lightweight E-Type", "XJ-S", "XJ-S Forza Edition", "Sport XJR-15", "XJ220", "XJ220S TWR", "C-X75", "XKR-S GT"],
+    "Jeep": ["Wrangler Rubicon", "Trailcat", "Grand Cherokee Trackhawk", "JT"],
+    "Jimco": ["#240 Fastball Racing Spec Trophy Truck", "#179 Hammerhead Class 1"],
+    "Koenigsegg": ["CCGT", "Agera", "One:1", "Regera", "Agera RS", "Jesko", "Gemera"],
+    "KTM": ["X-Bow GT4"],
+    "Lamborghini": ["Miura P400", "Countach LP5000 QV", "Diablo SV", "Diablo GTR", "Murciélago LP 670-4 SV", "Sesto Elemento", "Aventador LP700-4", "Gallardo LP570-4 Spyder Performante", "Veneno", "Huracán LP 610-4", "Centenario LP 770-4", "Aventador SVJ", "Urus", "Essenza SCV12", "Huracán EVO", "Huracán STO", "Sián Roadster", "Countach LPI 800-4", "Aventador LP 780-4 Ultimae", "Huracán EVO Spyder", "Huracán Sterrato", "Huracán Tecnica", "Temerario", "Revuelto"],
+    "Lancia": ["Stratos HF Stradale", "037 Stradale", "Delta S4", "Delta HF Integrale EVO"],
+    "Land Rover": ["Range Rover Sport SVR", "Defender 110 X"],
+    "Lexus": ["LFA", "LFA Forza Edition", "RC F", "LC 500"],
+    "Lincoln": ["Continental"],
+    "Lotus": ["Elise GT1", "Elise Series 1 Sport 190", "Esprit V8", "Exige Cup 430", "Scura Motorsports Exige WTAC", "Evija", "Evija Forza Edition", "Emira"],
+    "Lucid": ["Air Sapphire"],
+    "Maserati": ["Ghibli Cup", "MC12", "MC12 Versione Corsa", "MC20"],
+    "Mazda": ["Cosmo 110S Series II", "RX-3", "RX-3 Forza Edition", "#123 Mad Mike 808 Wagon", "RX-7 GSL-SE", "Savanna RX-7", "#55 Mazda 787B", "RX-7 Type R", "MX-5 Miata (1994)", "MX-5 Miata Forza Edition", "Mazdaspeed MX-5", "Furai", "Mazdaspeed 3", "RX-8 R3", "MX-5 (2013)", "MX-5 (2016)", "MX-5 Cup", "MX-5 Miata RF"],
+    "McLaren": ["F1", "F1 GT", "12C Coupé", "P1", "650S Spider", "570S Coupé", "600LT Coupé", "Speedtail", "620R", "765LT Coupé", "Sabre", "Artura", "W1"],
+    "Mercedes-AMG": ["GT S", "C 63 S Coupé", "GT R", "E 63 S", "GT 4-Door Coupé", "GT Black Series", "GT Black Series Welcome Pack", "SLC 43 Final Edition", "ONE", "SL 63"],
+    "Mercedes-Benz": ["300 SL Coupé", "300 SLR", "AMG Hammer Coupe", "190 E 2.5-16 Evolution II", "190 E 2.5-16 Evolution II Forza Edition", "AMG CLK GTR", "SL 65 AMG Black Series", "C 63 AMG Coupé Black Series", "A 45 AMG", "G 65 AMG", "G 65 AMG 6x6", "Unimog U5023"],
+    "Meyers Manx": ["Meyers Manx (1971)", "Meyers Manx 2.0 (2023)"],
+    "MG": ["Metro 6R4"],
+    "MINI": ["Cooper S", "John Cooper Works GP (2012)", "X-raid John Cooper Works Buggy", "John Cooper Works GP (2021)"],
+    "Mitsubishi": ["#269 Attacking the Clock Racing Minicab Time Attack", "Galant VR-4", "Eclipse GSX", "Lancer Evolution III GSR", "Montero Exceed 2800 TD", "GTO", "Montero Evolution", "Lancer Evolution VI GSR TM Edition", "Lancer Evolution VIII MR", "Lancer Evolution VIII MR Welcome Pack", "#1 Sierra Sierra Enterprises Lancer Evolution Time Attack", "Lancer Evolution IX MR", "Lancer Evolution X GSR"],
+    "Nissan": ["Fairlady Z 432", "Skyline 2000GT-R", "Skyline H/T 2000GT-R", "#11 Tomica Skyline Turbo Super Silhouette", "Safari Turbo", "Skyline GTS-R", "PAO", "S-Cargo", "S-Cargo Forza Edition", "Silvia K's (1989)", "Pulsar GTI-R", "Figaro", "Skyline GT-R (1992)", "#32 Skyline WTAC 'Xtreme GTR'", "240SX", "Fairlady Z Version S Twin Turbo", "Silvia K's (1994)", "Gloria Gran Turismo", "NISMO GT-R LM", "Skyline GT-R V-Spec", "Stagea RS Four V", "Silvia K's Aero", "#23 Pennzoil NISMO Skyline GT-R", "Skyline GT-R V-Spec II", "#36 Silvia WTAC", "Silvia Spec-R", "Fairlady Z (2003)", "GT-R Black Edition (R35)", "GT-R (R35)", "370Z NISMO", "GT-R NISMO (R35)", "GT-R NISMO (2024)", "Z NISMO"],
+    "Noble": ["M600"],
+    "Opel": ["Manta 400"],
+    "Pagani": ["Zonda Cinque Roadster", "Huayra BC Coupe", "Huayra R"],
+    "Peel": ["P50", "P50 Trolli Edition"],
+    "Penhall": ["The Cholla"],
+    "Peugeot": ["205 Turbo 16", "205 Rallye", "207 Super 2000"],
+    "Plymouth": ["Fury", "Barracuda Formula S", "'Cuda 426 Hemi"],
+    "Polaris": ["RZR Pro XP Ultimate"],
+    "Pontiac": ["Firebird Trans Am", "Firebird Trans Am GTA"],
+    "Porsche": ["911 Carrera RS", "911 Turbo 3.3", "#185 959 Prodrive Rally Raid", "928 GTS", "968 Turbo S", "911 GT2", "911 GT1 Strassenversion", "918 Spyder", "911 Carrera S", "911 GT3", "911 GT3 RS", "911 RallyeR"],
+    "Radical": ["RXC Turbo"],
+    "Ram": ["1500 TRX"],
+    "Reliant": ["Supervan III"],
+    "Renault": ["8 Gordini", "5 Turbo", "Clio Williams", "Megane R26.R", "Megane RS 250", "Megane R.S."],
+    "Rimac": ["Nevera"],
+    "RIVIAN": ["R1T"],
+    "RJ Anderson": ["#37 Polaris RZR-Rockstar Energy Pro 2 Truck", "#37 Polaris RZR Pro 4 Truck"],
+    "Saleen": ["S7 LM"],
+    "Schuppan": ["962CR"],
+    "Shelby": ["Cobra 427 S/C", "Cobra Daytona Coupe"],
+    "SIERRA Cars": ["700R"],
+    "SRT": ["Viper GTS"],
+    "Subaru": ["Legacy RS", "Vivio RX-R", "Vivio RX-R Forza Edition", "SVX", "Impreza 22B-STi Version", "Impreza WRX STi (2004)", "Legacy B4 2.0 GT", "Impreza WRX STI (2008)", "WRX STI (2011)", "BRZ (2013)", "WRX STI (2015)", "WRX STI ARX Supercar", "STI S209", "BRZ (2022)", "WRXT"],
+    "Toyota": ["Sports 800", "Sports 800 Fanta Edition", "2000GT", "Corolla SR5", "FJ40", "Sprinter Trueno GT Apex", "Sprinter Trueno GT Apex Forza Edition", "MR2 SC", "Chaser GT Twin Turbo", "Sera", "Celica GT-Four RC ST185", "Supra 2.0 GT", "#1 Baja T100 Truck", "Celica GT-Four ST205", "J&J Motorsport Supra WTAC", "MR2 GT", "Starlet Glanza V", "Chaser 2.5 Tourer V", "Soarer 2.5 GT-T", "Supra RZ", "Altezza RS200 Z Edition", "Celica Sport Specialty II", "Crown Super Deluxe Taxi", "86", "Land Cruiser Arctic Trucks AT37", "JPN Taxi", "4Runner TRD Pro", "Tacoma TRD Pro", "GR Supra", "GR Yaris", "GR86", "Land Cruiser (2025)"],
+    "TVR": ["Sagaris", "Griffith", "Cerbera Speed 12"],
+    "Ultima": ["Evolution Coupe 1020"],
+    "Volkswagen": ["Type 2 De Luxe", "Class 5/1600 Baja Bug", "Golf GTI", "Golf GTI 16V Mk2", "Corrado VR6", "Scirocco R", "Golf R (2014)", "Golf R (2021)", "Golf R (2022)"],
+    "Volvo": ["242 Turbo Evolution"],
+    "Wuling": ["Sunshine S", "Hongguang Mini EV Macaron"],
+    "Zenvo": ["TSR-S"]
+  };
+
+  var OTHER = "__other__";
+  var makeSel = document.getElementById('make');
+  var modelSel = document.getElementById('model');
+  var makeOtherField = document.getElementById('makeOtherField');
+  var modelOtherField = document.getElementById('modelOtherField');
+  var makeOtherInput = document.getElementById('makeOther');
+  var modelOtherInput = document.getElementById('modelOther');
+  var goBtn = document.getElementById('goBtn');
+  var results = document.getElementById('results');
+  var queryEcho = document.getElementById('queryEcho');
+  var googleAiModeLink = document.getElementById('googleAiModeLink');
+  var dbLinks = document.getElementById('dbLinks');
+  var webLinks = document.getElementById('webLinks');
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  var makers = Object.keys(CARS).sort(function(a,b){return a.localeCompare(b);});
+  var totalModels = makers.reduce(function(n,m){return n + CARS[m].length;},0);
+  document.getElementById('mfrCount').textContent = makers.length;
+  document.getElementById('modelCount').textContent = totalModels;
+
+  function opt(value, text){
+    var o = document.createElement('option');
+    o.value = value; o.textContent = text;
+    return o;
+  }
+
+  makeSel.appendChild(opt("", "Select a manufacturer…"));
+  makers.forEach(function(m){ makeSel.appendChild(opt(m, m)); });
+  makeSel.appendChild(opt(OTHER, "Other / not listed"));
+
+  function populateModels(){
+    modelSel.innerHTML = "";
+    var m = makeSel.value;
+    if(!m || m === OTHER){
+      modelSel.appendChild(opt("", "Select a manufacturer first"));
+      modelSel.disabled = true;
+      return;
+    }
+    modelSel.disabled = false;
+    modelSel.appendChild(opt("", "Select a model…"));
+    CARS[m].forEach(function(model){ modelSel.appendChild(opt(model, model)); });
+    modelSel.appendChild(opt(OTHER, "Other / not listed"));
+  }
+  populateModels();
+
+  function currentMake(){
+    return makeSel.value === OTHER ? makeOtherInput.value.trim() : makeSel.value;
+  }
+  function currentModel(){
+    return modelSel.value === OTHER ? modelOtherInput.value.trim() : modelSel.value;
+  }
+  function refreshGoState(){
+    var ready = !!currentMake() && !!currentModel();
+    goBtn.disabled = !ready;
+  }
+
+  makeSel.addEventListener('change', function(){
+    makeOtherField.hidden = makeSel.value !== OTHER;
+    populateModels();
+    refreshGoState();
+  });
+  modelSel.addEventListener('change', function(){
+    modelOtherField.hidden = modelSel.value !== OTHER;
+    refreshGoState();
+  });
+  makeOtherInput.addEventListener('input', refreshGoState);
+  modelOtherInput.addEventListener('input', refreshGoState);
+
+  function linkChip(container, name, desc, url){
+    var a = document.createElement('a');
+    a.className = 'linkchip';
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.innerHTML =
+      '<span><span class="name">' + name + '</span><span class="desc">' + desc + '</span></span>' +
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>';
+    container.appendChild(a);
+  }
+
+  goBtn.addEventListener('click', function(){
+    var make = currentMake();
+    var model = currentModel();
+    if(!make || !model) return;
+
+    var carLabel = make + ' ' + model;
+    var baseQuery = 'Forza Horizon 6 ' + carLabel + ' tune code';
+    queryEcho.textContent = '"' + baseQuery + '"';
+
+    var aiModeUrl = 'https://www.google.com/search?udm=50&q=' + encodeURIComponent(baseQuery);
+    googleAiModeLink.href = aiModeUrl;
+
+    dbLinks.innerHTML = "";
+    webLinks.innerHTML = "";
+    var q = encodeURIComponent(baseQuery);
+    var carQ = encodeURIComponent(carLabel);
+    var tuneQ = encodeURIComponent(carLabel + ' tune');
+
+    linkChip(dbLinks, 'FH6Hub', 'Community tune code directory', 'https://fh6hub.com/forza-horizon-6-tuning-codes?search=' + carQ);
+    linkChip(dbLinks, 'FH6 Tunes', 'Community tuning setups & share codes', 'https://www.google.com/search?q=' + encodeURIComponent('site:fh6tunes.app ' + carLabel));
+    linkChip(dbLinks, 'ForzaFire', 'Build & tune pages, community-voted', 'https://www.google.com/search?q=' + encodeURIComponent('site:forzafire.com ' + carLabel));
+    linkChip(dbLinks, 'ForzaHub', 'Share codes for liveries, tunes & EventLab', 'https://www.google.com/search?q=' + encodeURIComponent('site:forzahub.io ' + carLabel));
+    linkChip(dbLinks, 'GamerStation', 'Calculated tune guides by class & discipline', 'https://www.google.com/search?q=' + encodeURIComponent('site:gamerstation.gg ' + carLabel));
+    linkChip(dbLinks, 'Codmunity', 'Forza tuning community & share codes', 'https://www.google.com/search?q=' + encodeURIComponent('site:codmunity.gg ' + carLabel));
+    linkChip(dbLinks, 'Dexerto', 'Forza guides & tune round-ups', 'https://www.google.com/search?q=' + encodeURIComponent('site:dexerto.com ' + carLabel));
+    linkChip(dbLinks, 'Reddit', 'r/ForzaHorizon and related threads', 'https://www.reddit.com/search/?q=' + tuneQ + '&sort=new');
+    linkChip(dbLinks, 'YouTube', 'Tune-share videos, usually with codes in the description', 'https://www.youtube.com/results?search_query=' + q);
+
+    linkChip(webLinks, 'Google', 'Standard web search', 'https://www.google.com/search?q=' + q);
+    linkChip(webLinks, 'Google AI Mode', 'Conversational AI search results', aiModeUrl);
+    linkChip(webLinks, 'Bing', 'Standard web search', 'https://www.bing.com/search?q=' + q);
+    linkChip(webLinks, 'DuckDuckGo', 'Standard web search, no tracking', 'https://duckduckgo.com/?q=' + q);
+
+    results.hidden = false;
+    results.scrollIntoView({behavior:'smooth', block:'start'});
+
+    // Open Google AI Mode automatically. Popup blockers can stop this —
+    // the button stays there as a manual fallback either way.
+    window.open(aiModeUrl, '_blank', 'noopener,noreferrer');
+  });
+})();
+</script>
+
+</body></html>

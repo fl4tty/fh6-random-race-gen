@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FH6 Tune Finder — Community Tuning Codes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="hero">
+  <p class="hero-kicker">FH6 COMMUNITY GARAGE</p>
+  <h1 class="display">Tune <span class="accent">Finder</span></h1>
+  <p>Search a Forza Horizon 6 car and this pulls two things at once: a hand-verified seed set of tuning share codes, and a live search-engine query across community tune sites for that exact car.</p>
+</div>
+
+<div class="snapshot-banner">
+  <b>How this works.</b>
+  <p>The <b>Seeded tunes</b> panel is a small, hand-checked set of real share codes — car, class, discipline, code, tuner, upvotes — pulled from <a href="https://fh6tunes.app/tunes" target="_blank" rel="noopener">fh6tunes.app</a> and <a href="https://forzahorizonhub.com/tunes" target="_blank" rel="noopener">Forza Horizon Hub</a>. It currently covers <b id="bannerCarCount">—</b> cars out of the ~647 in FH6.</p>
+  <p>The <b>Live search results</b> panel calls a real search-engine API (Google Programmable Search) at request time, scoped to tune-code sites, for whatever car you type — including cars not in the seed set. Results are raw search snippets with a best-effort 9-digit code extracted by pattern match; always double-check the code against the linked page before using it in-game.</p>
+</div>
+
+<div class="search-section">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search a car — e.g. “Supra”, “787B”, “Civic”…" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <p class="browse-hint">Not sure what to search? <button type="button" id="browseAllBtn">Browse all seeded cars</button></p>
+</div>
+
+<div class="filter-section">
+  <h3>Or browse seeded tunes by track type</h3>
+  <div class="filter-pills" id="filterPills"></div>
+</div>
+
+<div class="results-section" id="resultsSection" style="display:none;"></div>
+<div class="all-cars-section" id="allCarsSection" style="display:none;"></div>
+
+<footer>
+  <span>FH6 Tune Finder — a companion to the FH6 Race Generator.</span>
+  <span>Seed data hand-collected from fh6tunes.app and Forza Horizon Hub · live results via Google Programmable Search · not affiliated with Playground Games or Microsoft.</span>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
