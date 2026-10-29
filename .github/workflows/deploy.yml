@@ -1,4 +1,4 @@
-name: Deploy to Turbify (FTP)
+name: Deploy to Turbify (FTPS)
 
 on:
   push:
@@ -21,12 +21,14 @@ jobs:
           mkdir deploy
           cp index.html fh6-random-race-gen.html fh6-map.jpg deploy/
 
-      - name: FTP deploy
+      - name: FTPS deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
           # Edit this to the actual folder cPanel's File Manager opens into
           # for this site (e.g. /public_html/ for the primary domain, or
           # /public_html/fh6/ for a subdomain/addon domain).
