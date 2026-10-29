@@ -32,6 +32,6 @@ jobs:
           # Edit this to the actual folder cPanel's File Manager opens into
           # for this site (e.g. /public_html/ for the primary domain, or
           # /public_html/fh6/ for a subdomain/addon domain).
-          server-dir: /public_html/
+          server-dir: /public_html/fh6
           local-dir: ./deploy/
           dangerous-clean-slate: false
