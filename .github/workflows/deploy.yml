@@ -29,9 +29,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          # Edit this to the actual folder cPanel's File Manager opens into
-          # for this site (e.g. /public_html/ for the primary domain, or
-          # /public_html/fh6/ for a subdomain/addon domain).
-          server-dir: /public_html/fh6/
+          # FTP_USERNAME is a dedicated account scoped to public_html/fh6,
+          # so its login root ("/") already IS that folder.
+          server-dir: /
           local-dir: ./deploy/
           dangerous-clean-slate: false
