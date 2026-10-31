@@ -20,6 +20,13 @@ A single-page app for Forza Horizon 6 that rolls a random race (car type, class,
    - The track always comes from the chosen race type.
 4. Click **Clear all** to start over, or use the small **clear** link next to any one group.
 
+### Spec Racing
+
+When nothing is kept, **🎲 Random race** lands on **Spec Racing** about 1 time in 8 (as often as any one race type). Spec Racing is a Horizon Play mode where the game assigns the car, class and route, so the summary shows **Game picks** for those and tells the convoy leader to open the **Online** tab (Horizon Play) and select **Spec Racing**.
+
+- To force a Spec Racing night, pick **Spec Racing** in the Race type list (or keep it with its padlock) and roll.
+- Keeping a car type, class or track never rolls Spec Racing, and picking any of those switches away from it.
+
 On a phone, **🎲 Random race** and **Clear** stay pinned to the bottom of the screen.
 
 ## Browsing on your own

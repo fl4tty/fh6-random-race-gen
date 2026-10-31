@@ -54,6 +54,8 @@
   .rr-tip{font-size:12.5px; color:var(--paper-dim);}
   .random-result-item .rr-v.is-any{color:var(--paper-dim); font-weight:500;}
   .rr-hint{font-size:11.5px; color:var(--paper-dim); margin:10px 0 0;}
+  .rr-spec{font-size:13px; color:var(--paper); margin:10px 0 0; line-height:1.45;}
+  .rr-spec b{color:var(--neon); font-weight:600;}
   .rr-top{display:flex; align-items:center; justify-content:space-between; gap:6px; margin:0 0 4px;}
   .rr-top .rr-k{margin:0;}
   .rr-lock{
@@ -857,6 +859,7 @@
     <div class="random-result-item" data-key="track"><div class="rr-top"><span class="rr-k">Track</span><button type="button" class="rr-lock" data-lock="track" aria-pressed="false" aria-label="Lock track" title="Lock track so Reroll keeps it"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path class="lock-shackle" d="M8 11V7a4 4 0 0 1 8 0"/></svg></button></div><span class="rr-v" id="rrTrack"></span></div>
   </div>
   <p class="rr-hint" id="rrHint" hidden>Click Random race to complete your race criteria.</p>
+  <p class="rr-spec" id="rrSpec" hidden>It's a <b>Spec Racing</b> night: the convoy leader opens the <b>Online</b> tab (Horizon Play) and selects <b>Spec Racing</b>. The game assigns the car, class and route — everyone drives the same stock car.</p>
 </div>
 
 <div class="layout">
@@ -884,7 +887,7 @@
   </aside>
 
   <main class="content">
-    <p class="random-hint">Selecting <b>🎲 Random race</b> picks the race type, car type, class and track for you. You can also select any of these yourself first and randomize from there.</p>
+    <p class="random-hint">Selecting <b>🎲 Random race</b> picks the race type, car type, class and track for you. You can also select any of these yourself first and randomize from there. Now and then it lands on <b>Spec Racing</b> instead, where the game picks everything.</p>
 
     <section class="picker" id="pane-race" data-pane="race" aria-labelledby="pane-race-title" hidden>
       <div class="picker-head">
@@ -1193,6 +1196,13 @@ const TRACK_LOCATIONS = {
 const TYPE_ORDER = Object.keys(TYPE_RACE_MAP);
 const RACE_ORDER = ["Street","Road","Touge","Drag","Dirt","Cross Country","Drift Attack"];
 
+// Spec Racing is a Horizon Play mode: the convoy leader selects Spec Racing from the Online tab and
+// the game assigns the car, class and route. So it's an outcome with nothing else to roll. With no
+// picks locked, Random race lands on it as often as on any single race type (1 in 8).
+const SPEC = "Spec Racing";
+const SPEC_CHANCE = 1 / (RACE_ORDER.length + 1);
+const isSpec = () => state.race === SPEC;
+
 // Race-type icons: an original set drawn for this app (not the in-game artwork).
 // Each is a coloured badge with a white symbol; shapes sit inside a 24x24 box.
 const RACE_STYLE = {
@@ -1203,6 +1213,7 @@ const RACE_STYLE = {
   "Dirt":          { color:"#b07a43", icon:'<path d="M4.6 17.8c1.9-4.6 4.6-6.6 7.4-6.6s5.5 2 7.4 6.6z" fill="#fff" fill-opacity=".3"/><circle cx="7.2" cy="9.4" r="1.2" fill="#fff" stroke="none"/><circle cx="10.6" cy="6.6" r="1.2" fill="#fff" stroke="none"/><circle cx="14.6" cy="7.2" r="1" fill="#fff" stroke="none"/><circle cx="17.2" cy="10" r="1.1" fill="#fff" stroke="none"/>' },
   "Cross Country": { color:"#2fa565", icon:'<path d="M12 4.8 7.2 11.5h2.9L7 15.8h10l-3.1-4.3h2.9z"/><path d="M12 15.8V19.3"/>' },
   "Drift Attack":  { color:"#e6439a", icon:'<path d="M6.5 16.5c0-5.2 3.4-8.5 9.5-8.5"/><path d="M13 5.2 15.9 8 13 10.9"/><path d="M5 19.5h2.6M9.6 19.5h1.6" stroke-width="1.6"/>' },
+  "Spec Racing":   { color:"#0f9fb0", icon:'<path d="M6.5 9.5h11M6.5 14.5h11" stroke-width="2.4"/>' },
 };
 function raceColor(race){ return (RACE_STYLE[race] || {}).color || "#8a8f9c"; }
 function raceIcon(race, size, ring){
@@ -1279,6 +1290,13 @@ function buildPillSet(containerId, items, kind){
       const selecting = state[kind] !== item;
       state[kind] = selecting ? item : null;
       locked[kind] = selecting;
+      // Spec Racing leaves car type, class and track to the game; picking any of those leaves Spec Racing
+      if(kind === "race" && selecting && item === SPEC){
+        state.type = null; state.class = null;
+        locked.type = false; locked.class = false;
+      } else if(kind !== "race" && selecting && isSpec()){
+        state.race = null; locked.race = false;
+      }
       // Only a new race type changes which tracks fit, so only that clears the track
       if(kind === "race"){ state.track = null; locked.track = false; }
       clearCarSearchSelection();
@@ -1422,6 +1440,12 @@ function renderTracks(){
   const groupsEl = document.getElementById('trackGroups');
   const countEl = document.getElementById('trackCount');
   groupsEl.innerHTML = "";
+
+  if(isSpec()){
+    countEl.textContent = "Spec Racing routes are picked by the game";
+    groupsEl.innerHTML = `<p class="mapping-empty">The game assigns the Spec Racing route. Pick another race type to browse tracks.</p>`;
+    return;
+  }
 
   const racesToShow = state.race ? [state.race] : RACE_ORDER;
 
@@ -1829,7 +1853,7 @@ function renderMap(){
   // Dots: every track (or just the selected discipline's) as its race icon — full colour when
   // pinned exactly, faded with a dashed ring when estimated
   hideMapTip();
-  const pool = state.race ? (TRACKS[state.race] || []) : ALL_TRACKS;
+  const pool = (state.race && !isSpec()) ? (TRACKS[state.race] || []) : ALL_TRACKS;
   mapEls.dots.innerHTML = pool
     .filter(t => t !== state.track)
     .map(t => {
@@ -2166,6 +2190,12 @@ document.getElementById('trackGroups').addEventListener('click', (e) => {
   clearCarSearchSelection();
   render();
 });
+// Placeholder for an unpicked track: "Any Road track", or the game's pick for Spec Racing
+function anyTrackLabel(){
+  if(isSpec()) return 'Game picks the route';
+  return state.race ? `Any ${state.race} track` : 'Any';
+}
+
 function pickRandom(arr){
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -2177,6 +2207,20 @@ function randomRace(){
   // a resolved-but-not-locked pick would look identical to a manual one, so once
   // Random race landed on e.g. "Drag" for Extreme Track Toys, it kept "sticking" and
   // never re-rolled to "Road" again on later clicks.
+  // Spec Racing: kept if locked, otherwise a 1-in-8 chance when nothing is locked.
+  // The game picks the car, class and route, so there's nothing else to roll.
+  const nothingLocked = !locked.type && !locked.race && !locked.class && !locked.track;
+  if((locked.race && isSpec()) || (nothingLocked && Math.random() < SPEC_CHANCE)){
+    state.type = null; state.class = null; state.track = null;
+    locked.type = false; locked.class = false; locked.track = false;
+    state.race = SPEC;
+    resultShown = true;
+    clearCarSearchSelection();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
   let type = locked.type ? state.type : null;
   let race = locked.race ? state.race : null;
   let cls = locked.class ? state.class : null;
@@ -2238,13 +2282,16 @@ document.getElementById('randomRaceMobile').addEventListener('click', randomRace
 function renderResultBanner(){
   const box = document.getElementById('randomResult');
   const setV = (id, html, has) => { const el = document.getElementById(id); el.innerHTML = html; el.classList.toggle('is-any', !has); };
-  setV('rrType', state.type || 'Any', !!state.type);
-  setV('rrClass', state.class || 'Any', !!state.class);
+  const spec = isSpec();
+  const anyText = spec ? 'Game picks' : 'Any';
+  setV('rrType', state.type || anyText, !!state.type);
+  setV('rrClass', state.class || anyText, !!state.class);
   setV('rrRace', state.race ? `${raceIcon(state.race, 20)}<span>${state.race}</span>` : 'Any', !!state.race);
-  setV('rrTrack', state.track || (state.race ? `Any ${state.race} track` : 'Any'), !!state.track);
-  // Hint shows once something is picked, until all four are filled in
+  setV('rrTrack', state.track || anyTrackLabel(), !!state.track);
+  // Hint shows once something is picked, until all four are filled in (Spec Racing needs nothing more)
   const picked = [state.type, state.class, state.race, state.track].filter(Boolean).length;
-  document.getElementById('rrHint').hidden = !(picked >= 1 && picked < 4);
+  document.getElementById('rrHint').hidden = spec || !(picked >= 1 && picked < 4);
+  document.getElementById('rrSpec').hidden = !spec;
   document.getElementById('rrTip').hidden = picked < 1;
   // After the first roll the Random race buttons become Reroll
   const label = resultShown ? '🎲 Reroll' : '🎲 Random race';
@@ -2429,10 +2476,11 @@ function renderNav(){
     class: state.class ? `<span>Class ${state.class}</span>` : null,
     tracks: state.track ? `<span>${state.track}</span>` : null,
   };
-  const any = { race:"Any", type:"Any", class:"Any", tracks: state.race ? `Any ${state.race} track` : "Any" };
+  const gameAny = isSpec() ? "Game picks" : "Any";
+  const any = { race:"Any", type:gameAny, class:gameAny, tracks: anyTrackLabel() };
   const mapV = document.querySelector('.nav-btn[data-pane="map"] .nav-v');
   if(mapV){
-    mapV.innerHTML = state.track ? `<span>Showing ${state.track}</span>` : `<span>${state.race ? `${state.race} tracks` : "All tracks"}</span>`;
+    mapV.innerHTML = state.track ? `<span>Showing ${state.track}</span>` : `<span>${state.race && !isSpec() ? `${state.race} tracks` : "All tracks"}</span>`;
     mapV.classList.toggle('is-any', !state.track);
   }
   Object.keys(vals).forEach(k => {
@@ -2444,7 +2492,7 @@ function renderNav(){
 }
 
 buildPillSet('typeSet', TYPE_ORDER, 'type');
-buildPillSet('raceSet', RACE_ORDER, 'race');
+buildPillSet('raceSet', [...RACE_ORDER, SPEC], 'race');
 buildPillSet('classSet', CLASS_ORDER, 'class');
 { const x = document.querySelector('#classSet .pill[data-value="X"]'); if(x) x.title = "Upgrade-only: no car starts in Class X"; }
 initMap();
