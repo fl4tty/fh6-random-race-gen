@@ -53,7 +53,7 @@ Forza Edition cars have their own **Forza Edition** type. Click any car in that 
 
 ### Fixing a pin
 
-All 86 tracks already have positions from fan-made map data. If one is off:
+86 of the 88 tracks already have positions from fan-made map data. If one is off (or it's one of the two Series 7 additions, Edo Circuit Road Race and Shuto Charge Street Race, which default to an approximate spot):
 
 1. Select the track, then click **Adjust pin** (or **Pin exact spot**).
 2. Click the right spot on the map. Press **Esc** to cancel.
@@ -79,7 +79,7 @@ Your pins are saved in this browser only. Use **Back up pins** to save them to a
 
 Forza Edition cars suit every race type. FH6 itself lets any car enter any race (only class caps apply), so these pairings follow guide recommendations by surface; every car type has at least two race types.
 
-The app has 38 car types, 658 cars, 7 race types and 86 tracks (up to date through Series 6, Oct 2026).
+The app has 38 car types, 667 cars, 7 race types and 88 tracks (up to date through Series 7, Nov 2026).
 
 ## Keeping the data up to date
 

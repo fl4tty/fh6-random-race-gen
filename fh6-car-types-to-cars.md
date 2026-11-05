@@ -1,6 +1,6 @@
 # Forza Horizon 6 — Car Types to Cars
 
-38 car types, 658 cars total. Source: forza_horizon_6_car_list.csv (includes Series 5 and Series 6 additions; Forza Edition cars split into their own type; exact-duplicate rows listed once). Cars are sorted by Make, then Model.
+38 car types, 667 cars total. Source: forza_horizon_6_car_list.csv (includes Series 5 through Series 7 additions; Forza Edition cars split into their own type; exact-duplicate rows listed once). Cars are sorted by Make, then Model.
 
 ## Contents
 
@@ -9,13 +9,13 @@
 - [Classic Racers](#classic-racers) (12)
 - [Classic Rally](#classic-rally) (7)
 - [Classic Sports Cars](#classic-sports-cars) (16)
-- [Cult Cars](#cult-cars) (9)
+- [Cult Cars](#cult-cars) (12)
 - [Drift Cars](#drift-cars) (16)
-- [Eclectic Domestics](#eclectic-domestics) (13)
+- [Eclectic Domestics](#eclectic-domestics) (14)
 - [Extreme Track Toys](#extreme-track-toys) (40)
 - [Forza Edition](#forza-edition) (19)
 - [GT Cars](#gt-cars) (6)
-- [Hot Hatch](#hot-hatch) (14)
+- [Hot Hatch](#hot-hatch) (15)
 - [Hypercars](#hypercars) (34)
 - [Modern Muscle](#modern-muscle) (22)
 - [Modern Rally](#modern-rally) (12)
@@ -24,7 +24,7 @@
 - [Modern Supercars](#modern-supercars) (32)
 - [Offroad](#offroad) (7)
 - [Pickups & 4x4s](#pickups-4x4s) (27)
-- [Rally Monsters](#rally-monsters) (14)
+- [Rally Monsters](#rally-monsters) (15)
 - [Rare Classics](#rare-classics) (11)
 - [Retro Hot Hatch](#retro-hot-hatch) (15)
 - [Retro Muscle](#retro-muscle) (10)
@@ -34,14 +34,14 @@
 - [Retro Super Saloons](#retro-super-saloons) (20)
 - [Retro Supercars](#retro-supercars) (31)
 - [Rods & Customs](#rods-customs) (7)
-- [Sports Utility Heroes](#sports-utility-heroes) (15)
+- [Sports Utility Heroes](#sports-utility-heroes) (16)
 - [Super GT](#super-gt) (13)
 - [Super Hot Hatch](#super-hot-hatch) (18)
-- [Track Toys](#track-toys) (35)
+- [Track Toys](#track-toys) (36)
 - [UTVs](#utvs) (5)
 - [Unlimited Buggies](#unlimited-buggies) (6)
 - [Unlimited Offroad](#unlimited-offroad) (13)
-- [Utility Heroes](#utility-heroes) (8)
+- [Utility Heroes](#utility-heroes) (9)
 
 ## Buggies (3)
 
@@ -117,11 +117,14 @@
 - 1965 Toyota Sports 800 — Class D
 - 1965 Toyota Sports 800 Fanta Edition — Class D
 
-## Cult Cars (9)
+## Cult Cars (12)
 
 - 1968 Abarth 595 Esseesse — Class D
 - 1957 BMW Isetta 300 Export — Class D
 - 1970 Citroën 2CV — Class D
+- 2025 Citroën Ami — Class D
+- 1987 Fiat Panda — Class D
+- 1966 Hillman Imp — Class D
 - 1970 Honda S800 — Class D
 - 1990 Jaguar XJ-S — Class C
 - 1962 Peel P50 — Class D
@@ -148,13 +151,14 @@
 - 2009 Formula Drift #99 Mazda RX-8 — Class S1
 - 1974 Mazda #123 Mad Mike 808 Wagon 'FURSTY' — Class S1
 
-## Eclectic Domestics (13)
+## Eclectic Domestics (14)
 
 - 1993 Autozam AZ-1 — Class D
 - 1994 Honda Acty — Class D
 - 1991 Honda Beat — Class D
 - 1984 Honda City E II — Class D
 - 1970 Honda N600 — Class D
+- 2016 Honda S660 Alpha — Class D
 - 1972 Honda Z GT — Class D
 - 1987 Nissan Be-1 — Class D
 - 1991 Nissan Figaro — Class D
@@ -238,10 +242,11 @@
 - 2021 Lexus LC 500 — Class B
 - 2021 Mercedes-AMG SL 63 — Class A
 
-## Hot Hatch (14)
+## Hot Hatch (15)
 
 - 2016 Abarth 695 Biposto — Class B
 - 2023 Acura Integra A-Spec — Class C
+- 2011 Alfa Romeo Giulietta Quadrifoglio Verde — Class C
 - 2015 Audi S1 — Class B
 - 2023 Ford Fiesta ST — Class C
 - 2022 Ford Focus ST — Class B
@@ -469,7 +474,7 @@
 - 2016 Toyota Land Cruiser Arctic Trucks AT37 — Class D
 - 2019 Toyota Tacoma TRD Pro — Class C
 
-## Rally Monsters (14)
+## Rally Monsters (15)
 
 - 1986 Audi #2 Audi Sport Quattro S1 — Class S1
 - 2017 Ford #14 Rahal Letterman Lanigan Racing Fiesta — Class S1
@@ -478,6 +483,7 @@
 - 1985 Ford RS200 Evolution — Class S1
 - 2022 Lamborghini Huracán Sterrato — Class S1
 - 1986 MG Metro 6R4 — Class A
+- 1983 Nissan 240RS — Class B
 - 1984 Opel Manta 400 — Class B
 - 2007 Peugeot 207 Super 2000 — Class A
 - 1985 Porsche #185 959 Prodrive Rally Raid — Class A
@@ -678,7 +684,7 @@
 - 1962 Lincoln Continental — Class D
 - 1958 Plymouth Fury — Class D
 
-## Sports Utility Heroes (15)
+## Sports Utility Heroes (16)
 
 - 2021 Aston Martin DBX — Class A
 - 2016 Bentley Bentayga — Class A
@@ -694,6 +700,7 @@
 - 2020 Land Rover Defender 110 X — Class C
 - 2015 Land Rover Range Rover Sport SVR — Class A
 - 2018 Porsche Cayenne Turbo — Class A
+- 2025 Porsche Macan GTS — Class A
 - 2025 Toyota Land Cruiser — Class C
 
 ## Super GT (13)
@@ -733,7 +740,7 @@
 - 2021 Volkswagen Golf R — Class B
 - 2022 Volkswagen Golf R — Class B
 
-## Track Toys (35)
+## Track Toys (36)
 
 - 2014 BAC Mono — Class S1
 - 2010 BMW M3 GTS — Class A
@@ -747,6 +754,7 @@
 - 2018 Exomotive Exocet Sport V8 XP-5 — Class S2
 - 2013 Ferrari 458 Speciale — Class S1
 - 2019 Ferrari 488 Pista — Class S2
+- 2025 Ford Mustang GTD — Class S1
 - 2016 Ford Mustang Shelby GT350R — Class S1
 - 1994 Ford Supervan 3 — Class S1
 - 2019 Ginetta G40 Junior — Class B
@@ -804,7 +812,7 @@
 - 2021 RJ Anderson #37 Polaris RZR Pro 4 Truck — Class A
 - 1993 Toyota #1 T100 Baja Truck — Class B
 
-## Utility Heroes (8)
+## Utility Heroes (9)
 
 - 1970 Chevrolet El Camino Super Sport 454 — Class C
 - 2014 Ford FPV Limited Edition Pursuit Ute — Class B
@@ -812,5 +820,6 @@
 - 2014 HSV Limited Edition GEN-F GTS Maloo — Class A
 - 1972 Reliant Supervan III — Class D
 - 1980 Subaru Brat GL — Class D
+- 2025 Volkswagen Electric Buzz — Class C
 - 1982 Volkswagen Pickup LX — Class D
 - 2013 Wuling Sunshine S — Class D
