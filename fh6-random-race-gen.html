@@ -40,6 +40,17 @@
     padding:18px 6vw 16px;
     border-bottom:1px solid var(--line);
   }
+  .app-version{
+    position:fixed;
+    top:10px;
+    right:12px;
+    z-index:40;
+    font-size:12px;
+    color:var(--paper-dim);
+    opacity:0.7;
+    letter-spacing:0.02em;
+    pointer-events:none;
+  }
   /* ---- Random race result banner ---- */
   .random-result{
     padding:20px 6vw;
@@ -843,6 +854,8 @@
 </head>
 <body>
 
+<span class="app-version" id="appVersion"></span>
+
 <div class="hero">
   <h1 class="display" style="font-size:clamp(22px, 4vw, 40px); line-height:1.15; margin:0; font-weight:900; max-width:none;">Forza Horizon 6 Random Race Generator</h1>
 </div>
@@ -979,6 +992,10 @@
 </div>
 
 <script>
+// Bump this with every release (matches the GitHub release tag), since the app has no build step to inject it.
+const APP_VERSION = "v1.3.1";
+document.getElementById("appVersion").textContent = APP_VERSION;
+
 // ---- Source: forza-horizon-6-car-types-to-races.md ----
 // Which race types each car type suits. FH6 itself lets any car enter any race (only class caps apply);
 // these pairings follow FH6 guide recommendations by surface (Oct 2026). Every type has at least two.

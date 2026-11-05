@@ -102,6 +102,8 @@ All the app's data is built into `fh6-random-race-gen.html`, inside the `<script
 
 Claude can do all three steps: just ask it to "check for new FH6 cars".
 
+**When cutting a release:** bump `APP_VERSION` near the top of the `<script>` in `fh6-random-race-gen.html` to match the new GitHub release tag (e.g. `v1.3.1`). The app can't read its own release tag at runtime (no build step), so this one line is the source of truth for the version shown in the top-right corner.
+
 ## Files in this folder
 
 | File | What it is |
