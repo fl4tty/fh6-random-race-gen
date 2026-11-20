@@ -2368,9 +2368,10 @@ function renderCarSearchResults(query){
     carSearchMatches = [];
     return;
   }
+  // No result cap: a make-only search (e.g. "Ford") should list every matching car,
+  // not just the first several. The results box scrolls (see .car-search-results CSS).
   carSearchMatches = ALL_CARS
-    .filter(car => `${car.y} ${car.mk} ${car.md}`.toLowerCase().includes(q))
-    .slice(0, 12);
+    .filter(car => `${car.y} ${car.mk} ${car.md}`.toLowerCase().includes(q));
   carSearchResultsEl.innerHTML = carSearchMatches.length
     ? carSearchMatches.map((car, i) => `<div class="car-search-result" data-idx="${i}"><b>${car.y} ${car.mk} ${car.md}</b><br>${car.type} · Class ${car.c}</div>`).join("")
     : `<div class="car-search-empty">No cars match "${query}".</div>`;
